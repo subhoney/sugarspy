@@ -1,0 +1,45 @@
+{
+    "_id": "case_id",
+    "caseName": "Case 123",
+    "description": "Description of the case",
+    "createdDate": "2023-01-01T12:00:00Z",
+    "status": "Active",
+    "documents": [
+        {
+            "documentID": "doc_id_1",
+            "filePath": "/path/to/document1.pdf",
+            "fileName": "document1.pdf",
+            "fileType": "pdf",
+            "uploadDate": "2023-01-01T12:00:00Z",
+            "uploadedBy": "user_id",
+            "metadata": {
+                "author": "John Doe",
+                "creationDate": "2022-12-01T12:00:00Z"
+            },
+            "tags": ["tag1", "tag2"]
+        },
+        {
+            "documentID": "doc_id_2",
+            "filePath": "/path/to/document2.docx",
+            "fileName": "document2.docx",
+            "fileType": "docx",
+            "uploadDate": "2023-01-02T12:00:00Z",
+            "uploadedBy": "user_id",
+            "metadata": {
+                "author": "Jane Smith",
+                "creationDate": "2022-12-02T12:00:00Z"
+            },
+            "tags": ["tag3", "tag4"]
+        }
+    ],
+    "reviewAssignments": [
+        {
+            "assignmentID": "assignment_id_1",
+            "documentID": "doc_id_1",
+            "assignedTo": "user_id",
+            "assignedDate": "2023-01-03T12:00:00Z",
+            "reviewStatus": "Pending",
+            "comments": "Initial review required"
+        }
+    ]
+}
