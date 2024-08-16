@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image
+      run: |
+        docker build -t myapp/ml-service:latest .
+        docker tag myapp/ml-service:latest myregistry.azurecr.io/myapp/ml-service:${{ github.sha }}
+    
+    - name: Run tests
+      run: docker run myapp/ml-service:latest pytest
+
+    - name: Push Docker image
+      run: |
+        echo ${{ secrets.REGISTRY_PASSWORD }} | docker login myregistry.azurecr.io -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+        docker push myregistry.azurecr.io/myapp/ml-service:${{ github.sha }}
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout infra repo
+      uses: actions/checkout@v3
+      with:
+        repository: myorg/infra-repo
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl set image deployment/ml-service-deployment ml-service=myregistry.azurecr.io/myapp/ml-service:${{ github.sha }}
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
