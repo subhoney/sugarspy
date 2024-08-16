@@ -6,6 +6,7 @@ graph TD
         API --> C[Questionnaire Service]
         API --> D[Results Display Service]
         API --> E[Upload-to-Server Service]
+        API --> ML[Machine Learning Service]
     end
 
     subgraph Message Bus
@@ -16,6 +17,7 @@ graph TD
     C <--> F
     D <--> F
     E <--> F
+    ML <--> F
 
     E -->|Upload Files| G[Centralized Data Repository]
     G -->|Notify Completion| F
@@ -24,3 +26,7 @@ graph TD
     C -->|Questionnaire UI Component| A
     D -->|Results UI Component| A
     E -->|Upload Status UI Component| A
+    ML -->|Prediction UI Component| A
+    C -->|Submit Data for Prediction| ML
+    ML -->|Store Prediction Results| G
+    G -->|Provide Data| D
